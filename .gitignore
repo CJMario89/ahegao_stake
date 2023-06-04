@@ -9,9 +9,9 @@
 /coverage
 
 # next.js
-/.next/
-# /.next/server
-# /.next/cache
+# /.next/
+/.next/server
+/.next/cache
 # /out/
 
 # production
