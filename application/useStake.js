@@ -19,7 +19,7 @@ const useStake = ({ tokenId, month }) => {
         console.log(tx);
       }
 
-      const response = await fetch("http://13.115.250.186/ /stake", {
+      const response = await fetch("http://13.115.250.186/stake", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ tokenId }),

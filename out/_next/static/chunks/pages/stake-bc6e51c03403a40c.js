@@ -941,14 +941,14 @@
                     }),
                     t = await s();
                   console.log(t);
-                  let n = await fetch("http://13.115.250.186/ /getMessage", {
+                  let n = await fetch("http://13.115.250.186/getMessage", {
                       method: "POST",
                       body: JSON.stringify({ address: e[0] }),
                       headers: { "Content-Type": "application/json" },
                     }),
                     o = await n.json(),
                     p = await t.signMessage(o.message),
-                    r = await fetch("http://13.115.250.186/ /sign-in", {
+                    r = await fetch("http://13.115.250.186/sign-in", {
                       method: "POST",
                       body: JSON.stringify({ address: e[0], signature: p }),
                       credentials: "include",
@@ -974,7 +974,7 @@
       let j = () => {
           let { account: e } = (0, A.useContext)(f.AccountContext);
           return (0, C.a)(["getTotalStake", e], async () => {
-            let e = await fetch("http://13.115.250.186/ /getTotalStake", {
+            let e = await fetch("http://13.115.250.186/getTotalStake", {
                 method: "GET",
                 credentials: "include",
                 headers: { Accept: "application/json" },
@@ -995,7 +995,7 @@
         R = () => {
           let { account: e } = (0, A.useContext)(f.AccountContext);
           return (0, C.a)(["getAllStake", e], async () => {
-            let e = await fetch("http://13.115.250.186/ /getAllStake", {
+            let e = await fetch("http://13.115.250.186/getAllStake", {
                 method: "GET",
                 credentials: "include",
                 headers: { Accept: "application/json" },
@@ -1007,7 +1007,7 @@
         I = () => {
           let { account: e } = (0, A.useContext)(f.AccountContext);
           return (0, C.a)(["allNFT", e], async () => {
-            let e = await fetch("http://13.115.250.186/ /getAllNFT", {
+            let e = await fetch("http://13.115.250.186/getAllNFT", {
                 method: "GET",
                 credentials: "include",
                 headers: { Accept: "application/json" },
@@ -1153,7 +1153,7 @@
                       i = await e.wait();
                     console.log(i);
                   }
-                  let r = await fetch("http://13.115.250.186/ /stake", {
+                  let r = await fetch("http://13.115.250.186/stake", {
                     method: "POST",
                     credentials: "include",
                     body: JSON.stringify({ tokenId: t }),
@@ -1194,15 +1194,12 @@
                         alert("Stake has not ended");
                       return;
                     }
-                  let s = await fetch(
-                      "http://13.115.250.186/ /getStakeReward",
-                      {
-                        method: "POST",
-                        credentials: "include",
-                        body: JSON.stringify({ tokenId: a }),
-                        headers: { "Content-Type": "application/json" },
-                      }
-                    ),
+                  let s = await fetch("http://13.115.250.186/getStakeReward", {
+                      method: "POST",
+                      credentials: "include",
+                      body: JSON.stringify({ tokenId: a }),
+                      headers: { "Content-Type": "application/json" },
+                    }),
                     o = await s.json();
                   return console.log(o), !0;
                 } catch (e) {
@@ -1214,7 +1211,7 @@
         W = () => {
           let { account: e } = (0, A.useContext)(f.AccountContext);
           return (0, C.a)(["getUserPoint", e], async () => {
-            let e = await fetch("http://13.115.250.186/ /getUserPoint", {
+            let e = await fetch("http://13.115.250.186/getUserPoint", {
                 method: "GET",
                 credentials: "include",
                 headers: { Accept: "application/json" },
