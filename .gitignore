@@ -10,7 +10,7 @@
 
 # next.js
 # /.next/
-/.next/server
+# /.next/server
 /.next/cache
 # /out/
 
