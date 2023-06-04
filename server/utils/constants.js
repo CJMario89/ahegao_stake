@@ -1,0 +1,2 @@
+export const erc721Address = "0x9288244f5570269cB0958b07f205E3C0035c6067";
+export const stakeAddress = "0x689c13d9c82709707c263510F29A4aC6FdC29339";
