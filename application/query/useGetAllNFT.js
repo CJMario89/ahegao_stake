@@ -5,7 +5,7 @@ import { AccountContext } from "../../pages/_app";
 const useGetAllNFT = () => {
   const { account } = useContext(AccountContext);
   return useQuery(["allNFT", account], async () => {
-    const response = await fetch(`http://localhost:5050 /getAllNFT`, {
+    const response = await fetch(`http://13.115.250.186/ /getAllNFT`, {
       method: "GET",
       credentials: "include",
       headers: {
