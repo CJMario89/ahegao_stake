@@ -5,7 +5,7 @@ import { AccountContext } from "../../pages/_app";
 const useGetTotalStake = () => {
   const { account } = useContext(AccountContext);
   return useQuery(["getTotalStake", account], async () => {
-    const response = await fetch(`http://13.115.250.186/getTotalStake`, {
+    const response = await fetch(`http://localhost:5050/getTotalStake`, {
       method: "GET",
       credentials: "include",
       headers: {

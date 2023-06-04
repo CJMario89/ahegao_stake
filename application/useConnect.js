@@ -36,7 +36,7 @@ const useConnect = () => {
         //sign message jwt
         const signer = await init();
         console.log(signer);
-        const response = await fetch("http://13.115.250.186/getMessage", {
+        const response = await fetch("http://localhost:5050/getMessage", {
           method: "POST",
           body: JSON.stringify({ address: accounts[0] }),
           headers: {
@@ -45,7 +45,7 @@ const useConnect = () => {
         });
         const data = await response.json();
         const signature = await signer.signMessage(data.message);
-        const response_ = await fetch("http://13.115.250.186/sign-in", {
+        const response_ = await fetch("http://localhost:5050/sign-in", {
           method: "POST",
           body: JSON.stringify({ address: accounts[0], signature }),
           credentials: "include",
@@ -81,7 +81,7 @@ const useConnect = () => {
   //           method: "eth_requestAccounts",
   //         });
   //         //check jwt
-  //         const response = await fetch("http://13.115.250.186/getJWTAddress", {
+  //         const response = await fetch("http://localhost:5050/getJWTAddress", {
   //           method: "GET",
   //           credentials: "include",
   //           headers: {
