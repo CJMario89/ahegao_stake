@@ -19,7 +19,7 @@ const useStake = ({ tokenId, month }) => {
         console.log(tx);
       }
 
-      const response = await fetch("http://35.78.200.94/stake", {
+      const response = await fetch("http://localhost:5050 /stake", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ tokenId }),
