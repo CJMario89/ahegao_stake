@@ -26,7 +26,7 @@ const useUnstake = () => {
           return;
         }
       }
-      const response = await fetch("http://localhost:5050/getStakeReward", {
+      const response = await fetch("http://35.78.200.94/getStakeReward", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ tokenId }),
