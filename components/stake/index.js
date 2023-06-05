@@ -268,6 +268,7 @@ const Index = () => {
                   {Array.isArray(allNFTs) &&
                     allNFTs.length > 0 &&
                     allNFTs.map(({ media, tokenId }) => {
+                      const image = media[0]?.thumbnail ?? media[0]?.gateway;
                       return (
                         <Flex key={tokenId} alignItems="center">
                           <Input
@@ -279,12 +280,12 @@ const Index = () => {
                                 setSelectedImage("");
                               } else {
                                 setSelectedTokenId(tokenId);
-                                setSelectedImage(media[0]?.thumbnail);
+                                setSelectedImage(image);
                               }
                             }}
                           />
                           <Image
-                            src={media[0]?.thumbnail}
+                            src={image}
                             ml="15px"
                             width="50px"
                             height="50px"
