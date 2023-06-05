@@ -1,9 +1,15 @@
 import Sequelize, { DataTypes } from "sequelize";
+import "dotenv/config";
 
-const sequelize = new Sequelize("ahegao", "mario", "mario", {
-  host: "localhost",
-  dialect: "mariadb",
-});
+const sequelize = new Sequelize(
+  "ahegao",
+  process.env.db_user,
+  process.env.db_password,
+  {
+    host: "localhost",
+    dialect: "mariadb",
+  }
+);
 
 const Users = sequelize.define(
   "Users",

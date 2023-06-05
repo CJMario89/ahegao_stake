@@ -22,7 +22,7 @@ import useGetTotalNFT from "../../application/query/useGetTotalNFT";
 import useGetAllStake from "../../application/query/useGetAllStake";
 import useGetAllNFT from "../../application/query/useGetAllNFT";
 import {
-  caculateDailyPoint,
+  caculateMonthPoint,
   caculatePoint,
   getWeight,
 } from "../../utils/caculatePoint";
@@ -49,6 +49,7 @@ const Index = () => {
   const [selectedNft, setSelectedNft] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [modalBody, setModalBody] = useState("");
+  const [isAlert, setIsAlert] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [month, setMonth] = useState(1);
   // const { data } = useGetNFTInfo("1", {
@@ -78,12 +79,26 @@ const Index = () => {
     isError: isUnstakeError,
   } = useUnstake();
   useEffect(() => {
-    if (isApprovedError || isStakeError || isUnstakeError) {
+    if (isApprovedError) {
       setModalBody("");
       setIsOpen(false);
       setIsReady(false);
     }
-  }, [isApprovedError, isStakeError, isUnstakeError]);
+  }, [isApprovedError]);
+  useEffect(() => {
+    if (isStakeError) {
+      setModalBody("");
+      setIsOpen(false);
+      setIsReady(false);
+    }
+  }, [isStakeError]);
+  useEffect(() => {
+    if (isUnstakeError) {
+      setModalBody("");
+      setIsOpen(false);
+      setIsReady(false);
+    }
+  }, [isUnstakeError]);
   useEffect(() => {
     (async () => {
       if (isApproved) {
@@ -138,6 +153,17 @@ const Index = () => {
       setIsAvailable(false);
     }
   }, [status]);
+  useEffect(() => {
+    const change = (chainId) => {
+      if (chainId.toString() !== "80001") {
+        setModalBody("Wrong chain. Please switch to Mumbai");
+        setIsAlert(true);
+        setIsReady(true);
+        setIsOpen(true);
+      }
+    };
+    window.ethereum.on("chainChanged", change);
+  }, []);
   return (
     <>
       {isAvailable ? (
@@ -321,7 +347,7 @@ const Index = () => {
                       image: selectedImage,
                       month,
                       total: caculatePoint(month, 1),
-                      point: caculateDailyPoint(month, 1),
+                      point: caculateMonthPoint(month, 1),
                       weight: getWeight(month),
                     });
                   }}
@@ -458,15 +484,17 @@ const Index = () => {
           </Button>
         </Flex>
       )}
-      {/* <HintModal
+      <HintModal
         isOpen={isOpen}
         onClose={() => {
           setIsOpen(false);
           setIsReady(false);
+          setIsAlert(false);
         }}
         body={modalBody}
         isReady={isReady}
-      /> */}
+        isAlert={isAlert}
+      />
     </>
   );
 };

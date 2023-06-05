@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AccountContext, ContractContext } from "../pages/_app";
 
 const useUnstake = () => {
@@ -23,7 +23,7 @@ const useUnstake = () => {
           if (e?.code !== "ACTION_REJECTED") {
             alert("Stake has not ended");
           }
-          return;
+          throw "User rejected";
         }
       }
       const response = await fetch("http://13.115.250.186/api/getStakeReward", {
@@ -41,9 +41,14 @@ const useUnstake = () => {
       return true;
     } catch (e) {
       console.log(e);
-      return false;
+      throw "User rejected";
     }
   });
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      mutation.reset();
+    }
+  }, [mutation, mutation.isSuccess]);
   return {
     ...mutation,
   };

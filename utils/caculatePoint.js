@@ -28,6 +28,9 @@ export const caculateDailyPoint = (month, level) => {
   return dailyAmount[level] * getWeight(month);
 };
 
+export const caculateMonthPoint = (month, level) => {
+  return dailyAmount[level] * getWeight(month) * 30;
+};
 export const caculatePoint = (month, level) => {
   return dailyAmount[level] * dayPerMonth * getWeight(month) * month;
 };

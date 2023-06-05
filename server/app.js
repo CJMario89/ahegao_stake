@@ -9,11 +9,7 @@ app.use(cookieParser());
 
 // define routes here..
 
-const allowedOrigins = [
-  // "http://localhost:3000",
-  // "http://localhost:3001",
-  // "http://localhost:8080",
-];
+const allowedOrigins = ["http://localhost:3000", "http://13.115.250.186"];
 
 app.use(
   cors({

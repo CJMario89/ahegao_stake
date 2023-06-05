@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AccountContext, ContractContext } from "../pages/_app";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 const useStake = ({ tokenId, month }) => {
   const { STAKE } = useContext(ContractContext);
@@ -40,6 +40,11 @@ const useStake = ({ tokenId, month }) => {
       return {};
     }
   });
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      mutation.reset();
+    }
+  }, [mutation, mutation.isSuccess]);
   return {
     ...mutation,
   };
