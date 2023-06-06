@@ -158,7 +158,9 @@ const Index = () => {
         setIsOpen(true);
       }
     };
-    window.ethereum.on("chainChanged", change);
+    if (window?.ethereum) {
+      window.ethereum.on("chainChanged", change);
+    }
   }, []);
   return (
     <>
