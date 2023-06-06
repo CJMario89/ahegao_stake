@@ -37,7 +37,7 @@ const useStake = ({ tokenId, month }) => {
       return json;
     } catch (e) {
       console.log(e);
-      return {};
+      throw e;
     }
   });
   useEffect(() => {

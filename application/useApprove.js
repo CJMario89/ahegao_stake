@@ -15,11 +15,12 @@ const useApprove = () => {
       if (isApproved) {
         return true;
       }
-      await ERC721.setApprovalForAll(stakingAddress, true);
+      const tx = await ERC721.setApprovalForAll(stakingAddress, true);
+      await tx.wait();
       return true;
     } catch (e) {
       console.log(e);
-      return false;
+      throw e;
     }
   });
   return mutation;

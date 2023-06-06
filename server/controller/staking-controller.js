@@ -42,12 +42,15 @@ const StakingController = {
         throw "no staking NFT";
       }
       let level = 1;
-      if (attributes.length === 0) {
-        level = 2;
-      }
-      if (attributes[0]?.value === "Web3 Crush") {
-        level = 3;
-      }
+      attributes.forEach((attribute) => {
+        if (attribute.trait_type === "Font") {
+          level = 2;
+        }
+        if (attribute.trait_type === "Special Edition") {
+          level = 3;
+        }
+      });
+
       const point = caculatePoint(month, level);
 
       await Staking.create({

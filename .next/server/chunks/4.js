@@ -154,33 +154,25 @@ const navOptions = [
     {
         title: "ABOUT",
         onClick: ()=>{
-            document.querySelector("#about").scrollIntoView({
-                behavior: "smooth"
-            });
+            window.location.href = "/#about";
         }
     },
     {
         title: "STAKING",
         onClick: ()=>{
-            document.querySelector("#staking").scrollIntoView({
-                behavior: "smooth"
-            });
+            window.location.href = "/#staking";
         }
     },
     {
         title: "ROADMAP",
         onClick: ()=>{
-            document.querySelector("#roadmap").scrollIntoView({
-                behavior: "smooth"
-            });
+            window.location.href = "/#roadmap";
         }
     },
     {
         title: "TEAM",
         onClick: ()=>{
-            document.querySelector("#team").scrollIntoView({
-                behavior: "smooth"
-            });
+            window.location.href = "/#team";
         }
     }
 ];

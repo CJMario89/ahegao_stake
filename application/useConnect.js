@@ -62,8 +62,14 @@ const useConnect = () => {
         setStatus("isDisconnected");
       }
     } else {
+      window
+        .open(
+          `https://metamask.app.link/dapp/${window?.location.host}/stake`,
+          "_blank"
+        )
+        .focus();
       setStatus("isDisconnected");
-      alert("Please use browser supported wallets");
+      // alert("Please use browser supported wallets");
     }
   };
 

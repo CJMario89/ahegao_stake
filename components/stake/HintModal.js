@@ -60,8 +60,8 @@ const HintModal = ({ isOpen, onClose, body, isReady, isAlert }) => {
         position="fixed"
         top="0"
         left="0"
-        width="100vw"
-        height="100vh"
+        width="150vw"
+        height="150vh"
         zIndex={40}
       />
     </>

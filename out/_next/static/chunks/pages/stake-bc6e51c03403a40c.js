@@ -1194,15 +1194,12 @@
                         alert("Stake has not ended");
                       return;
                     }
-                  let s = await fetch(
-                      "http://13.115.250.186/api/getStakeReward",
-                      {
-                        method: "POST",
-                        credentials: "include",
-                        body: JSON.stringify({ tokenId: a }),
-                        headers: { "Content-Type": "application/json" },
-                      }
-                    ),
+                  let s = await fetch("http://13.115.250.186/api/getStakeReward", {
+                      method: "POST",
+                      credentials: "include",
+                      body: JSON.stringify({ tokenId: a }),
+                      headers: { "Content-Type": "application/json" },
+                    }),
                     o = await s.json();
                   return console.log(o), !0;
                 } catch (e) {

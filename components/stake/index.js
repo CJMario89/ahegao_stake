@@ -33,6 +33,7 @@ import useStake from "../../application/useStake";
 import useUnstake from "../../application/useUnstake";
 import useGetUserPoint from "../../application/query/useGetUserPoint";
 import HintModal from "./HintModal";
+import useScreenWidth from "./useScreenWidth";
 
 const pinkFontStyle = {
   color: "#E686FF",
@@ -41,6 +42,7 @@ const pinkFontStyle = {
 };
 
 const Index = () => {
+  const { isMobile, screenWidth } = useScreenWidth();
   const { account, status } = useContext(AccountContext);
   const { connect } = useConnect();
   const [isAvailable, setIsAvailable] = useState(false);
@@ -52,6 +54,7 @@ const Index = () => {
   const [isAlert, setIsAlert] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [month, setMonth] = useState(1);
+  const [level, setLevel] = useState(1);
   // const { data } = useGetNFTInfo("1", {
   //   enable: isAvailable,
   // });
@@ -133,15 +136,8 @@ const Index = () => {
       getUserPoint();
       setIsReady(true);
     }
-  }, [
-    getAllNFT,
-    getAllStake,
-    getTotalNFT,
-    getTotalStake,
-    getUserPoint,
-    stakingResult,
-    unstakingResult,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stakingResult, unstakingResult]);
   console.log(allNFTs);
   console.log(stakes);
   console.log(totalNFT);
@@ -167,22 +163,33 @@ const Index = () => {
   return (
     <>
       {isAvailable ? (
-        <Container maxW="1440px" m="0 auto" pt="150px" mb="86px">
-          <Flex w="100%" columnGap="50px" justifyContent="center">
-            <Flex flexDirection="column">
+        <Container
+          maxW="1440px"
+          m="0 auto"
+          pt={isMobile ? "100px" : "150px"}
+          mb="86px"
+        >
+          <Flex
+            w="100%"
+            columnGap="30px"
+            justifyContent="center"
+            flexDirection={isMobile ? "column" : "row"}
+            rowGap="50px"
+          >
+            <Flex flexDirection="column" alignItems="center">
               <Flex
                 position="relative"
-                w="450px"
+                w="330px"
                 flexDirection="column"
                 justifyContent="center"
               >
                 <Image src={total_header.src} alt="" />
                 <Text
                   position="absolute"
-                  top="43px"
-                  left="43px"
+                  top="35px"
+                  left="31px"
                   zIndex={2}
-                  fontSize="46px"
+                  fontSize="30px"
                   color="#E686FF"
                   fontWeight="1000"
                   m="0"
@@ -191,75 +198,85 @@ const Index = () => {
                 </Text>
               </Flex>
               <Flex
-                mt="50px"
+                mt={isMobile ? "30px" : "50px"}
                 position="relative"
-                w="450px"
+                w="400px"
                 flexDirection="column"
                 justifyContent="center"
+                alignItems="center"
               >
-                <Image w="400px" src={staking_header.src} alt="" />
+                <Image w="330px" src={staking_header.src} alt="" />
                 <Flex flexDirection="column" rowGap="10px">
                   {Array.isArray(stakes) &&
                     stakes.length > 0 &&
                     stakes.map(({ tokenId, endTime }, i) => {
+                      const canUnlock =
+                        Date.now() > new Date(Date.parse(endTime));
                       return (
                         <Flex key={i} alignItems="center">
                           <Text
                             color="#E686FF"
                             fontSize="20px"
-                            ml="97px"
+                            ml="22px"
                             fontWeight="600"
                           >
                             #{tokenId}
                           </Text>
-                          <Text
-                            color="#E686FF"
-                            w="100px"
-                            fontSize="20px"
-                            fontWeight="600"
-                            ml="108px"
-                            flexShrink="0"
-                          >
-                            {new Date(Date.parse(endTime)).toLocaleString()}
-                          </Text>
-                          <Button
-                            ml="20px"
-                            borderWidth="0px"
-                            fontSize="16px"
-                            px="16px"
-                            py="8px"
-                            borderRadius="8px"
-                            fontWeight="600"
-                            border="1px solid #E686FF"
-                            color="#E686FF"
-                            bgColor="rgba(230, 134, 255, 0.5)"
-                            cursor="pointer"
-                            onClick={() => {
-                              unstake({ tokenId });
-                              setIsOpen(true);
-                              setModalBody("Unlock your NFT...");
-                            }}
-                          >
-                            Unlock
-                          </Button>
+                          {!canUnlock && (
+                            <Text
+                              color="#E686FF"
+                              w="100px"
+                              fontSize="20px"
+                              fontWeight="600"
+                              ml="76px"
+                              flexShrink="0"
+                            >
+                              {new Date(Date.parse(endTime)).toLocaleString()}
+                            </Text>
+                          )}
+                          {canUnlock && (
+                            <Button
+                              ml="100px"
+                              borderWidth="0px"
+                              fontSize="14px"
+                              px="12px"
+                              py="6px"
+                              borderRadius="6px"
+                              fontWeight="600"
+                              border="1px solid #E686FF"
+                              color="#E686FF"
+                              bgColor="rgba(230, 134, 255, 0.5)"
+                              cursor="pointer"
+                              onClick={() => {
+                                unstake({ tokenId });
+                                setIsOpen(true);
+                                setModalBody("Unlock your NFT...");
+                              }}
+                            >
+                              Unlock
+                            </Button>
+                          )}
                         </Flex>
                       );
                     })}
                 </Flex>
               </Flex>
               <Flex
-                mt="50px"
+                mt={isMobile ? "30px" : "50px"}
                 position="relative"
-                w="450px"
+                w="400px"
                 flexDirection="column"
                 justifyContent="center"
+                alignItems="center"
               >
-                <Image w="400px" src={choose_block.src} alt="" />
+                <Image w="330px" src={choose_block.src} alt="" />
                 <Flex
-                  w="310px"
-                  h="300px"
-                  left="48px"
-                  top="100px"
+                  w="263px"
+                  h="254px"
+                  left="64px"
+                  top="81px"
+                  pl="10px"
+                  py="10px"
                   position="absolute"
                   flexDirection="column"
                   rowGap="10px"
@@ -267,8 +284,18 @@ const Index = () => {
                 >
                   {Array.isArray(allNFTs) &&
                     allNFTs.length > 0 &&
-                    allNFTs.map(({ media, tokenId }) => {
+                    allNFTs.map(({ media, tokenId, rawMetadata }) => {
                       const image = media[0]?.thumbnail ?? media[0]?.gateway;
+                      const attributes = rawMetadata.attributes;
+                      let _level = 1;
+                      attributes.forEach((attribute) => {
+                        if (attribute.trait_type === "Font") {
+                          _level = 2;
+                        }
+                        if (attribute.trait_type === "Special Edition") {
+                          _level = 3;
+                        }
+                      });
                       return (
                         <Flex key={tokenId} alignItems="center">
                           <Input
@@ -278,9 +305,11 @@ const Index = () => {
                               if (selectedTokenId === tokenId) {
                                 setSelectedTokenId(-1);
                                 setSelectedImage("");
+                                setLevel(1);
                               } else {
                                 setSelectedTokenId(tokenId);
                                 setSelectedImage(image);
+                                setLevel(_level);
                               }
                             }}
                           />
@@ -291,10 +320,10 @@ const Index = () => {
                             height="50px"
                             alt=""
                           />
-                          <Text ml="60px" {...pinkFontStyle}>
+                          <Text ml="30px" {...pinkFontStyle}>
                             #{tokenId}
                           </Text>
-                          <Text ml="75px" {...pinkFontStyle}>
+                          <Text ml="60px" {...pinkFontStyle} fontSize="16px">
                             {selectedTokenId === tokenId && "Select"}
                           </Text>
                         </Flex>
@@ -303,19 +332,21 @@ const Index = () => {
                 </Flex>
                 <Text
                   position="absolute"
-                  left="111px"
-                  bottom="144px"
+                  left="128px"
+                  bottom="119px"
                   fontWeight="800"
                   color="rgb(200, 200, 200)"
+                  fontSize="12px"
                 >
                   {month} month{month !== "1" ? "s" : ""}
                 </Text>
                 <Text
                   position="absolute"
-                  left="240px"
-                  bottom="144px"
+                  left="230px"
+                  bottom="119px"
                   fontWeight="800"
                   color="rgb(200, 200, 200)"
+                  fontSize="12px"
                 >
                   {getWeight(month)}
                 </Text>
@@ -325,9 +356,9 @@ const Index = () => {
                   step="1"
                   max="12"
                   position="absolute"
-                  width="325px"
-                  left="28px"
-                  bottom="113px"
+                  width="260px"
+                  left="57px"
+                  bottom="90px"
                   value={month}
                   onInput={(e) => {
                     setMonth(e.target.value);
@@ -337,38 +368,43 @@ const Index = () => {
                   _hover={{ transform: "scale(1.05)" }}
                   cursor="pointer"
                   position="absolute"
-                  bottom="33px"
-                  left="28px"
-                  width="200px"
+                  bottom="40px"
+                  left="56px"
+                  width="180px"
                   src={confirm_button.src}
                   alt=""
                   onClick={() => {
+                    if (isMobile) {
+                      document
+                        .querySelector("#confirm")
+                        .scrollIntoView({ behavior: "smooth" });
+                    }
                     setSelectedNft({
                       tokenId: selectedTokenId,
                       image: selectedImage,
                       month,
-                      total: caculatePoint(month, 1),
-                      point: caculateMonthPoint(month, 1),
+                      total: caculatePoint(month, level),
+                      point: caculateMonthPoint(month, level),
                       weight: getWeight(month),
                     });
                   }}
                 />
               </Flex>
             </Flex>
-            <Flex flexDirection="column">
+            <Flex flexDirection="column" alignItems="center" id="confirm">
               <Flex
                 position="relative"
-                w="450px"
+                w="330px"
                 flexDirection="column"
                 justifyContent="center"
               >
                 <Image src={supply_rate_header.src} alt="" />
                 <Text
                   position="absolute"
-                  top="43px"
-                  left="43px"
+                  top="35px"
+                  left="31px"
                   zIndex={2}
-                  fontSize="46px"
+                  fontSize="30px"
                   color="#E686FF"
                   fontWeight="1000"
                   m="0"
@@ -377,23 +413,23 @@ const Index = () => {
                 </Text>
               </Flex>
               <Flex
-                mt="50px"
+                mt={isMobile ? "30px" : "50px"}
                 position="relative"
-                w="450px"
+                w="330px"
                 flexDirection="column"
                 justifyContent="center"
               >
                 <Image src={approve_block.src} alt="" />
                 {selectedNft.tokenId >= 0 && (
                   <Flex
-                    w="333px"
-                    h="66px"
-                    left="40px"
-                    top="136px"
+                    w="250px"
+                    h="49px"
+                    left="27px"
+                    top="99px"
                     position="absolute"
                     alignItems="center"
                     columnGap="20px"
-                    pl="10px"
+                    pl="5px"
                     {...pinkFontStyle}
                   >
                     <Text>#{selectedNft.tokenId}</Text>
@@ -403,34 +439,38 @@ const Index = () => {
                       src={selectedNft.image}
                       alt=""
                     />
-                    <Flex flexDirection="column">
+                    <Flex
+                      flexDirection="column"
+                      fontSize="14px"
+                      whiteSpace="nowrap"
+                    >
                       <Text>Month: {selectedNft.month}</Text>
                       <Text>Weight: {selectedNft.weight}</Text>
                     </Flex>
-                    <Text>Point: {selectedNft.total}</Text>
+                    <Text fontSize="14px">Point: {selectedNft.total}</Text>
                   </Flex>
                 )}
                 {selectedNft.tokenId >= 0 && (
                   <Flex
-                    w="333px"
-                    h="30px"
-                    left="40px"
-                    top="264px"
+                    w="245px"
+                    h="23px"
+                    left="27px"
+                    top="193px"
                     position="absolute"
                     alignItems="center"
-                    pl="10px"
+                    pl="5px"
                     {...pinkFontStyle}
                   >
-                    <Text>{selectedNft.point}</Text>
+                    <Text fontSize="14px">{selectedNft.point}</Text>
                   </Flex>
                 )}
                 <Image
                   _hover={{ transform: "scale(1.05)" }}
                   cursor="pointer"
                   position="absolute"
-                  bottom="55px"
-                  left="115px"
-                  width="200px"
+                  bottom="38px"
+                  left="66px"
+                  width="180px"
                   src={approve_button.src}
                   alt=""
                   onClick={() => {
@@ -440,7 +480,12 @@ const Index = () => {
                   }}
                 />
               </Flex>
-              <Flex flexDirection="column" p="10px" {...pinkFontStyle}>
+              <Flex
+                flexDirection="column"
+                p="10px"
+                {...pinkFontStyle}
+                fontSize="14px"
+              >
                 <Text>Account:</Text>
                 <Text>{account}</Text>
                 <Text>Point: {point}</Text>
@@ -457,7 +502,7 @@ const Index = () => {
           justifyContent="center"
         >
           <Button
-            w="350px"
+            w="330px"
             h="70px"
             borderRadius="16px"
             fontSize="20px"
