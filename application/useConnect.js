@@ -12,12 +12,12 @@ const useConnect = () => {
     const signer = await provider.getSigner();
     setSigner(signer);
     const erc721Contract = new ethers.Contract(
-      "0x9288244f5570269cB0958b07f205E3C0035c6067",
+      "0x8b0f78Dc900b27455cC5a7E5f58d4de989DB6E76",
       erc721_abi,
       signer
     );
     const stakingContract = new ethers.Contract(
-      "0x689c13d9c82709707c263510F29A4aC6FdC29339",
+      "0x7F57387342C2ADabaD64Cb0eD9387136a359172A",
       staking_abi,
       signer
     );

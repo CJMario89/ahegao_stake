@@ -108,8 +108,8 @@ app.get("/getAllNFT", async function (req, res) {
 
 app.post("/getStakeReward", async function (req, res) {
   try {
-    const rewards = await StakingController.getStakeReward(req);
-    return res.status(200).send({ rewards });
+    const isSuccess = await StakingController.getStakeReward(req);
+    return res.status(200).send({ isSuccess });
   } catch (e) {
     return res.status(500).send({ response: e });
   }

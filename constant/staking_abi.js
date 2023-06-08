@@ -3,6 +3,145 @@ export const staking_abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_nft",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "Stakes",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "isStaking",
+        type: "bool",
+      },
+      {
+        internalType: "uint256",
+        name: "startTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "endTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "month",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "UserTokens",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_staker",
+        type: "address",
+      },
+    ],
+    name: "getAllStakes",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_staker",
+        type: "address",
+      },
+      {
+        internalType: "uint256[]",
+        name: "_tokenId",
+        type: "uint256[]",
+      },
+    ],
+    name: "getStakes",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "bool",
+            name: "isStaking",
+            type: "bool",
+          },
+          {
+            internalType: "uint256",
+            name: "startTime",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTime",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "month",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct NFTStaking.Stake[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "",
         type: "address",
       },
@@ -36,13 +175,13 @@ export const staking_abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
+        internalType: "uint256[]",
         name: "_tokenId",
-        type: "uint256",
+        type: "uint256[]",
       },
       {
         internalType: "uint256",
-        name: "_duration",
+        name: "month",
         type: "uint256",
       },
     ],
@@ -54,143 +193,14 @@ export const staking_abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_nft",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
+        internalType: "uint256[]",
         name: "_tokenId",
-        type: "uint256",
+        type: "uint256[]",
       },
     ],
     name: "unstake",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_staker",
-        type: "address",
-      },
-    ],
-    name: "getAllStake",
-    outputs: [
-      {
-        internalType: "uint256[]",
-        name: "",
-        type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_staker",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getStake",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "bool",
-            name: "isStaking",
-            type: "bool",
-          },
-          {
-            internalType: "uint256",
-            name: "startTime",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "endTime",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct NFTStaking.Stake",
-        name: "",
-        type: "tuple",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "Stakes",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "isStaking",
-        type: "bool",
-      },
-      {
-        internalType: "uint256",
-        name: "startTime",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "endTime",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "UserTokens",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
 ];

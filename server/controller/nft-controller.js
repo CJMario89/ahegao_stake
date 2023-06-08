@@ -11,13 +11,18 @@ const NftController = {
     const owned = await alchemy.nft.getNftsForOwner(address, {
       contractAddresses: [erc721Address],
     });
-    const allStake = await stakingContract.getAllStake(address);
+    const allStake = await stakingContract.getAllStakes(address);
     if (allStake.length === 0) {
       return owned?.ownedNfts;
     }
-    const stakes = await Promise.all(
-      allStake.map(async (tokenId) => {
-        return await alchemy.nft.getNftMetadata(erc721Address, Number(tokenId));
+
+    const stakes = await alchemy.nft.getNftMetadataBatch(
+      allStake.map((tokenId) => {
+        return {
+          contractAddress: erc721Address,
+          tokenId: Number(tokenId),
+          tokenType: "ERC721",
+        };
       })
     );
     const unsortedAllNFT = [...owned?.ownedNfts, ...stakes];

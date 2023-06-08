@@ -17,50 +17,70 @@ export const stakingContract = new ethers.Contract(
 
 const StakingController = {
   async stake(req) {
-    const { tokenId } = req.body;
+    const { tokenIds } = req.body;
     try {
       const address = await UserController.getJWTAddress(req);
 
-      const stakingLength = (await Staking.findAll({ where: { tokenId } }))
-        .length;
+      const stakingLength = (
+        await Staking.findAll({ where: { tokenId: tokenIds } })
+      ).length;
       const isRecording = stakingLength > 0;
       if (isRecording) {
         throw "has staked NFT";
       }
+      const _tokenIds = tokenIds.map((tokenId) => {
+        return Number(tokenId);
+      });
+      console.log(_tokenIds);
+      const stakes = await stakingContract.getStakes(address, _tokenIds);
+      const nfts = await alchemy.nft.getNftMetadataBatch(
+        _tokenIds.map((tokenId) => {
+          return {
+            contractAddress: erc721Address,
+            tokenId,
+            tokenType: "ERC721",
+          };
+        })
+      );
 
-      const stake = await stakingContract.getStake(address, tokenId);
-      const isStaking = stake[0];
-      const startTime = Number(stake[1]) * 1000;
-      const endTime = Number(stake[2]) * 1000;
-      const month = Number(stake[3]);
-      if (!isStaking) {
-        throw "no staking NFT";
-      }
-      const nft = await alchemy.nft.getNftMetadata(erc721Address, tokenId);
-      const attributes = nft.rawMetadata.attributes;
-      if (!Array.isArray(attributes)) {
-        throw "no staking NFT";
-      }
-      let level = 1;
-      attributes.forEach((attribute) => {
-        if (attribute.trait_type === "Font") {
-          level = 2;
+      const stakings = tokenIds.map((tokenId, i) => {
+        const stake = stakes[i];
+        const nft = nfts[i];
+        const isStaking = stake[0];
+        const startTime = Number(stake[1]) * 1000;
+        const endTime = Number(stake[2]) * 1000;
+        const month = Number(stake[3]);
+        if (!isStaking) {
+          throw "no staking NFT";
         }
-        if (attribute.trait_type === "Special Edition") {
-          level = 3;
+        const attributes = nft.rawMetadata.attributes;
+        if (!Array.isArray(attributes)) {
+          throw "no staking NFT";
         }
+        let level = 1;
+        attributes.forEach((attribute) => {
+          if (attribute.trait_type === "Font") {
+            if (attribute.value !== "Empty") {
+              level = 2;
+            }
+          }
+          if (attribute.trait_type === "Special Edition") {
+            level = 3;
+          }
+        });
+
+        const point = caculatePoint(month, level);
+        return {
+          tokenId,
+          address,
+          startTime,
+          endTime,
+          month,
+          stakingPoint: point,
+        };
       });
 
-      const point = caculatePoint(month, level);
-
-      await Staking.create({
-        tokenId,
-        address,
-        startTime,
-        endTime,
-        month,
-        stakingPoint: point,
-      });
+      await Staking.bulkCreate(stakings);
       return true;
     } catch (e) {
       console.log(e);
@@ -70,7 +90,27 @@ const StakingController = {
 
   async getAllStake(req) {
     const address = await UserController.getJWTAddress(req);
-    const stakings = await Staking.findAll({ where: { address } });
+    const _stakings = await Staking.findAll({ where: { address } });
+    if (_stakings.length === 0) {
+      return [];
+    }
+    const tokenIds = _stakings.map((stake) => {
+      return stake.tokenId;
+    });
+
+    const nfts = await alchemy.nft.getNftMetadataBatch(
+      tokenIds.map((tokenId) => {
+        return {
+          contractAddress: erc721Address,
+          tokenId,
+          tokenType: "ERC721",
+        };
+      })
+    );
+    const stakings = _stakings.map((stake, i) => {
+      return { ...stake.toJSON(), ...nfts[i] };
+    });
+
     return stakings;
   },
   async getTotalStake() {
@@ -78,30 +118,33 @@ const StakingController = {
     return stakings.length;
   },
   async getStakeReward(req) {
-    const { tokenId } = req.body;
-    console.log(tokenId);
+    const { tokenIds } = req.body;
+    console.log(tokenIds);
     const address = await UserController.getJWTAddress(req);
-    const stake = (await Staking.findOne({ where: { tokenId } })).toJSON();
-    console.log(stake);
-    if (!stake) {
+    const stakes = await Staking.findAll({ where: { tokenId: tokenIds } });
+    console.log(stakes);
+    if (stakes.length === 0) {
       throw "No staking exist";
     }
-    const isReady = Date.now() > Date.parse(stake.endTime);
-    console.log(isReady);
-    if (!isReady) {
-      throw "Staking is not ready";
-    }
-    await Point.create({
-      address,
-      amount: stake.stakingPoint,
+    const points = stakes.map((stake) => {
+      const isReady = Date.now() > Date.parse(stake.endTime);
+      console.log(isReady);
+      if (!isReady) {
+        throw "Staking is not ready";
+      }
+      return {
+        address,
+        amount: stake.stakingPoint,
+      };
     });
+
+    await Point.bulkCreate(points);
     await Staking.destroy({
       where: {
-        tokenId,
+        tokenId: tokenIds,
       },
     });
-    console.log(stake.stakingPoint);
-    return stake.stakingPoint;
+    return true;
   },
 };
 

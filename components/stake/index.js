@@ -48,7 +48,8 @@ const Index = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [selectedTokenId, setSelectedTokenId] = useState(-1);
   const [selectedImage, setSelectedImage] = useState("");
-  const [selectedNft, setSelectedNft] = useState({});
+  const [selectedNfts, setSelectedNfts] = useState([]);
+  const [submitNfts, setSubmitNfts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [isAlert, setIsAlert] = useState(false);
@@ -73,8 +74,8 @@ const Index = () => {
     data: stakingResult,
     isError: isStakeError,
   } = useStake({
-    tokenId: selectedNft.tokenId,
-    month: selectedNft.month,
+    nfts: submitNfts,
+    month: submitNfts[0]?.month,
   });
   const {
     mutate: unstake,
@@ -122,7 +123,8 @@ const Index = () => {
       getAllStake();
       getAllNFT();
       getTotalNFT();
-      setSelectedNft({});
+      setSelectedNfts([]);
+      setSubmitNfts([]);
       setSelectedTokenId(-1);
       setSelectedImage("");
       setIsReady(true);
@@ -162,6 +164,8 @@ const Index = () => {
       window.ethereum.on("chainChanged", change);
     }
   }, []);
+  console.log(submitNfts);
+
   return (
     <>
       {isAvailable ? (
@@ -208,59 +212,112 @@ const Index = () => {
                 alignItems="center"
               >
                 <Image w="330px" src={staking_header.src} alt="" />
-                <Flex flexDirection="column" rowGap="10px">
+                <Flex
+                  flexDirection="column"
+                  rowGap="10px"
+                  w="100%"
+                  position="relative"
+                >
+                  {Array.isArray(stakes) && stakes.length > 0 && (
+                    <Flex>
+                      <Input
+                        ml="45px"
+                        type="checkbox"
+                        onInput={(e) => {
+                          if (e.target.checked) {
+                            document
+                              .querySelectorAll(".unstake")
+                              .forEach((dom) => (dom.checked = "checked"));
+                          } else {
+                            document
+                              .querySelectorAll(".unstake")
+                              .forEach((dom) => (dom.checked = false));
+                          }
+                        }}
+                      />
+                      <Text {...pinkFontStyle} ml="15px">
+                        Select All
+                      </Text>
+                    </Flex>
+                  )}
                   {Array.isArray(stakes) &&
                     stakes.length > 0 &&
-                    stakes.map(({ tokenId, endTime }, i) => {
+                    stakes.map(({ tokenId, endTime, media }, i) => {
                       const canUnlock =
                         Date.now() > new Date(Date.parse(endTime));
+                      const image = media[0]?.thumbnail ?? media[0]?.gateway;
                       return (
-                        <Flex key={i} alignItems="center">
+                        <Flex key={i} alignItems="center" w="100%">
+                          <Input
+                            className="unstake"
+                            type="checkbox"
+                            ml="45px"
+                          />
+                          <Image
+                            src={image}
+                            width="50px"
+                            height="50px"
+                            ml="10px"
+                            alt=""
+                          />
                           <Text
                             color="#E686FF"
                             fontSize="20px"
-                            ml="22px"
+                            ml="10px"
                             fontWeight="600"
+                            w="50px"
                           >
                             #{tokenId}
                           </Text>
-                          {!canUnlock && (
-                            <Text
-                              color="#E686FF"
-                              w="100px"
-                              fontSize="20px"
-                              fontWeight="600"
-                              ml="76px"
-                              flexShrink="0"
-                            >
-                              {new Date(Date.parse(endTime)).toLocaleString()}
+
+                          <Text
+                            color="#E686FF"
+                            w="100px"
+                            ml="30px"
+                            fontSize="20px"
+                            fontWeight="600"
+                            flexShrink="0"
+                          >
+                            {new Date(Date.parse(endTime)).toLocaleString()}
+                          </Text>
+                          {/* {canUnlock && (
+                            <Text ml="55px" {...pinkFontStyle}>
+                              Available
                             </Text>
-                          )}
-                          {canUnlock && (
-                            <Button
-                              ml="100px"
-                              borderWidth="0px"
-                              fontSize="14px"
-                              px="12px"
-                              py="6px"
-                              borderRadius="6px"
-                              fontWeight="600"
-                              border="1px solid #E686FF"
-                              color="#E686FF"
-                              bgColor="rgba(230, 134, 255, 0.5)"
-                              cursor="pointer"
-                              onClick={() => {
-                                unstake({ tokenId });
-                                setIsOpen(true);
-                                setModalBody("Unlock your NFT...");
-                              }}
-                            >
-                              Unlock
-                            </Button>
-                          )}
+                          )} */}
                         </Flex>
                       );
                     })}
+                  <Button
+                    borderWidth="0px"
+                    fontSize="20px"
+                    mt="20px"
+                    px="16px"
+                    py="8px"
+                    borderRadius="8px"
+                    fontWeight="600"
+                    border="1px solid #E686FF"
+                    color="#E686FF"
+                    bgColor="rgba(230, 134, 255, 0.5)"
+                    alignSelf="center"
+                    cursor="pointer"
+                    onClick={() => {
+                      const checks = Array.from(
+                        document.querySelectorAll(".unstake")
+                      ).map((dom) => dom.checked);
+                      if (checks.every((check) => !check)) {
+                        return;
+                      }
+                      const unstakes = stakes.filter((stake, i) => {
+                        return checks[i];
+                      });
+                      unstake({ unstakes });
+                      setIsOpen(true);
+                      setModalBody("Unlock your NFT...");
+                    }}
+                  >
+                    Unlock
+                  </Button>
                 </Flex>
               </Flex>
               <Flex
@@ -284,6 +341,53 @@ const Index = () => {
                   rowGap="10px"
                   overflow="auto"
                 >
+                  {Array.isArray(allNFTs) && allNFTs.length > 0 && (
+                    <Flex>
+                      <Input
+                        type="checkbox"
+                        onInput={(e) => {
+                          if (e.target.checked) {
+                            setSelectedNfts(
+                              allNFTs.map(({ media, tokenId, rawMetadata }) => {
+                                const image =
+                                  media[0]?.thumbnail ?? media[0]?.gateway;
+                                const attributes = rawMetadata.attributes;
+                                let _level = 1;
+                                attributes.forEach((attribute) => {
+                                  if (attribute.trait_type === "Font") {
+                                    if (attribute.value !== "Empty") {
+                                      _level = 2;
+                                    }
+                                  }
+                                  if (
+                                    attribute.trait_type === "Special Edition"
+                                  ) {
+                                    _level = 3;
+                                  }
+                                });
+                                return {
+                                  tokenId: tokenId,
+                                  image: image,
+                                  level: _level,
+                                };
+                              })
+                            );
+                            document
+                              .querySelectorAll(".stake")
+                              .forEach((dom) => (dom.checked = "checked"));
+                          } else {
+                            setSelectedNfts([]);
+                            document
+                              .querySelectorAll(".stake")
+                              .forEach((dom) => (dom.checked = false));
+                          }
+                        }}
+                      />
+                      <Text {...pinkFontStyle} ml="15px">
+                        Select All
+                      </Text>
+                    </Flex>
+                  )}
                   {Array.isArray(allNFTs) &&
                     allNFTs.length > 0 &&
                     allNFTs.map(({ media, tokenId, rawMetadata }) => {
@@ -292,7 +396,9 @@ const Index = () => {
                       let _level = 1;
                       attributes.forEach((attribute) => {
                         if (attribute.trait_type === "Font") {
-                          _level = 2;
+                          if (attribute.value !== "Empty") {
+                            _level = 2;
+                          }
                         }
                         if (attribute.trait_type === "Special Edition") {
                           _level = 3;
@@ -301,17 +407,22 @@ const Index = () => {
                       return (
                         <Flex key={tokenId} alignItems="center">
                           <Input
+                            className="stake"
                             type="checkbox"
-                            checked={selectedTokenId === tokenId}
-                            onInput={() => {
-                              if (selectedTokenId === tokenId) {
-                                setSelectedTokenId(-1);
-                                setSelectedImage("");
-                                setLevel(1);
+                            onInput={(e) => {
+                              if (e.target.checked) {
+                                setSelectedNfts([
+                                  ...selectedNfts,
+                                  {
+                                    tokenId: tokenId,
+                                    image: image,
+                                    level: _level,
+                                  },
+                                ]);
                               } else {
-                                setSelectedTokenId(tokenId);
-                                setSelectedImage(image);
-                                setLevel(_level);
+                                setSelectedNfts((prev) =>
+                                  prev.filter((p) => p.tokenId !== tokenId)
+                                );
                               }
                             }}
                           />
@@ -326,7 +437,9 @@ const Index = () => {
                             #{tokenId}
                           </Text>
                           <Text ml="60px" {...pinkFontStyle} fontSize="16px">
-                            {selectedTokenId === tokenId && "Select"}
+                            {selectedNfts
+                              .map((selectedNft) => selectedNft.tokenId)
+                              .includes(tokenId) && "Select"}
                           </Text>
                         </Flex>
                       );
@@ -381,14 +494,20 @@ const Index = () => {
                         .querySelector("#confirm")
                         .scrollIntoView({ behavior: "smooth" });
                     }
-                    setSelectedNft({
-                      tokenId: selectedTokenId,
-                      image: selectedImage,
-                      month,
-                      total: caculatePoint(month, level),
-                      point: caculateMonthPoint(month, level),
-                      weight: getWeight(month),
+                    const nfts = selectedNfts.map((selectedNft) => {
+                      return {
+                        ...selectedNft,
+                        month,
+                        total: caculatePoint(month, selectedNft.level),
+                        point: caculateMonthPoint(month, selectedNft.level),
+                        weight: getWeight(month),
+                      };
                     });
+                    setSubmitNfts(
+                      nfts.sort((a, b) => {
+                        return Number(a.tokenId) - Number(b.tokenId);
+                      })
+                    );
                   }}
                 />
               </Flex>
@@ -422,48 +541,70 @@ const Index = () => {
                 justifyContent="center"
               >
                 <Image src={approve_block.src} alt="" />
-                {selectedNft.tokenId >= 0 && (
+                {Array.isArray(submitNfts) && submitNfts.length > 0 && (
                   <Flex
-                    w="250px"
-                    h="49px"
+                    w="246px"
+                    h="224px"
                     left="27px"
-                    top="99px"
+                    top="121px"
                     position="absolute"
+                    flexDirection="column"
                     alignItems="center"
                     columnGap="20px"
                     pl="5px"
+                    overflow="auto"
+                    rowGap={"15px"}
+                    overflowX="hidden"
                     {...pinkFontStyle}
                   >
-                    <Text>#{selectedNft.tokenId}</Text>
-                    <Image
-                      width="50px"
-                      height="50px"
-                      src={selectedNft.image}
-                      alt=""
-                    />
-                    <Flex
-                      flexDirection="column"
-                      fontSize="14px"
-                      whiteSpace="nowrap"
-                    >
-                      <Text>Month: {selectedNft.month}</Text>
-                      <Text>Weight: {selectedNft.weight}</Text>
-                    </Flex>
-                    <Text fontSize="14px">Point: {selectedNft.total}</Text>
+                    {submitNfts.map((selectedNft, i) => {
+                      return (
+                        <Flex
+                          key={i}
+                          alignItems="center"
+                          w="100%"
+                          columnGap="12px"
+                        >
+                          <Text>#{selectedNft.tokenId}</Text>
+                          <Image
+                            width="50px"
+                            height="50px"
+                            src={selectedNft.image}
+                            alt=""
+                          />
+                          <Flex
+                            flexDirection="column"
+                            fontSize="14px"
+                            whiteSpace="nowrap"
+                          >
+                            <Text>Month: {selectedNft.month}</Text>
+                            <Text>Weight: {selectedNft.weight}</Text>
+                          </Flex>
+                          <Text fontSize="14px" ml="10px">
+                            Point: {selectedNft.total}
+                          </Text>
+                        </Flex>
+                      );
+                    })}
                   </Flex>
                 )}
-                {selectedNft.tokenId >= 0 && (
+                {Array.isArray(submitNfts) && submitNfts.length > 0 && (
                   <Flex
                     w="245px"
                     h="23px"
-                    left="27px"
-                    top="193px"
+                    left="30px"
+                    top="389px"
                     position="absolute"
                     alignItems="center"
                     pl="5px"
                     {...pinkFontStyle}
                   >
-                    <Text fontSize="14px">{selectedNft.point}</Text>
+                    <Text fontSize="14px">
+                      {submitNfts.reduce(
+                        (accu, submitNft) => accu + submitNft.point,
+                        0
+                      )}
+                    </Text>
                   </Flex>
                 )}
                 <Image
@@ -476,9 +617,12 @@ const Index = () => {
                   src={approve_button.src}
                   alt=""
                   onClick={() => {
+                    if (submitNfts.length <= 0) {
+                      return;
+                    }
                     approve();
                     setIsOpen(true);
-                    setModalBody("Staking your NFT...");
+                    setModalBody("Staking your Ahegao...");
                   }}
                 />
               </Flex>

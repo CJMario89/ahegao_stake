@@ -1,9 +1,6 @@
 import { Box, Button, Flex, Spinner, Text } from "@chakra-ui/react";
-import { useContext } from "react";
-import { AccountContext } from "../../pages/_app";
 
 const HintModal = ({ isOpen, onClose, body, isReady, isAlert }) => {
-  const { signer } = useContext(AccountContext);
   return (
     <>
       <Flex
@@ -19,7 +16,7 @@ const HintModal = ({ isOpen, onClose, body, isReady, isAlert }) => {
         bgColor="rgba(230, 134, 255, 0.5)"
         color="#E686FF"
         alignItems="center"
-        zIndex={50}
+        zIndex={3000}
         borderRadius="16px"
         // color="white"
       >
@@ -62,7 +59,7 @@ const HintModal = ({ isOpen, onClose, body, isReady, isAlert }) => {
         left="0"
         width="150vw"
         height="150vh"
-        zIndex={40}
+        zIndex={2000}
       />
     </>
   );

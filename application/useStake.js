@@ -2,19 +2,24 @@ import { useMutation } from "@tanstack/react-query";
 import { AccountContext, ContractContext } from "../pages/_app";
 import { useContext, useEffect } from "react";
 
-const useStake = ({ tokenId, month }) => {
+const useStake = ({ nfts, month }) => {
   const { STAKE } = useContext(ContractContext);
   const { account, setStatus, setAccount } = useContext(AccountContext);
   const mutation = useMutation(async () => {
     if (!STAKE || !account) {
       return;
     }
+    const tokenIds = nfts.map((nft) => {
+      return nft.tokenId;
+    });
     try {
-      const stake = await STAKE.getStake(account, tokenId);
-      console.log(stake);
-      const isStaking = stake[0];
-      if (!isStaking) {
-        const execution = await STAKE.stake(tokenId, month);
+      const stakes = await STAKE.getStakes(account, tokenIds);
+      const verified = stakes.every((stake) => {
+        return !stake[0];
+      });
+
+      if (verified) {
+        const execution = await STAKE.stake(tokenIds, month);
         const tx = await execution.wait();
         console.log(tx);
       }
@@ -22,7 +27,7 @@ const useStake = ({ tokenId, month }) => {
       const response = await fetch("http://13.115.250.186/api/stake", {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({ tokenId }),
+        body: JSON.stringify({ tokenIds }),
         headers: {
           "Content-Type": "application/json",
         },
