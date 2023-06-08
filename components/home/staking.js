@@ -23,7 +23,9 @@ const StakeButton = ({ ...restProps }) => {
       _hover={{
         filter: "brightness(1.1)",
       }}
-      onClick={() => {}}
+      onClick={() => {
+        alert("coming soon!");
+      }}
       {...restProps}
     >
       <Text
