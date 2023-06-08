@@ -313,7 +313,7 @@ const Index = () => {
                       });
                       unstake({ unstakes });
                       setIsOpen(true);
-                      setModalBody("Unlock your NFT...");
+                      setModalBody("Unlock your Ahegao...");
                     }}
                   >
                     Unlock
