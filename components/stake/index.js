@@ -358,7 +358,8 @@ const Index = () => {
                   position="absolute"
                   flexDirection="column"
                   rowGap="10px"
-                  overflow="auto"
+                  overflowX="hidden"
+                  overflowY="auto"
                 >
                   {Array.isArray(allNFTs) && allNFTs.length > 0 && (
                     <Flex>
@@ -372,18 +373,23 @@ const Index = () => {
                                   media[0]?.thumbnail ?? media[0]?.gateway;
                                 const attributes = rawMetadata.attributes;
                                 let _level = 1;
-                                attributes.forEach((attribute) => {
-                                  if (attribute.trait_type === "Font") {
-                                    if (attribute.value !== "Empty") {
-                                      _level = 2;
+                                if (
+                                  Array.isArray(attributes) &&
+                                  attributes.length > 0
+                                ) {
+                                  attributes.forEach((attribute) => {
+                                    if (attribute.trait_type === "Font") {
+                                      if (attribute.value !== "Empty") {
+                                        _level = 2;
+                                      }
                                     }
-                                  }
-                                  if (
-                                    attribute.trait_type === "Special Edition"
-                                  ) {
-                                    _level = 3;
-                                  }
-                                });
+                                    if (
+                                      attribute.trait_type === "Special Edition"
+                                    ) {
+                                      _level = 3;
+                                    }
+                                  });
+                                }
                                 return {
                                   tokenId: tokenId,
                                   image: image,
@@ -413,16 +419,19 @@ const Index = () => {
                       const image = media[0]?.thumbnail ?? media[0]?.gateway;
                       const attributes = rawMetadata.attributes;
                       let _level = 1;
-                      attributes.forEach((attribute) => {
-                        if (attribute.trait_type === "Font") {
-                          if (attribute.value !== "Empty") {
-                            _level = 2;
+                      if (Array.isArray(attributes) && attributes.length > 0) {
+                        attributes.forEach((attribute) => {
+                          if (attribute.trait_type === "Font") {
+                            if (attribute.value !== "Empty") {
+                              _level = 2;
+                            }
                           }
-                        }
-                        if (attribute.trait_type === "Special Edition") {
-                          _level = 3;
-                        }
-                      });
+                          if (attribute.trait_type === "Special Edition") {
+                            _level = 3;
+                          }
+                        });
+                      }
+
                       return (
                         <Flex key={tokenId} alignItems="center">
                           <Input
