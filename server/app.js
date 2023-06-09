@@ -10,8 +10,8 @@ app.use(cookieParser());
 // define routes here..
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "http://13.115.250.186",
+  // "http://localhost:3000",
+  // "http://13.115.250.186",
   "https://ahegao.love",
 ];
 
