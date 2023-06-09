@@ -7,7 +7,7 @@ import { erc721Address, stakeAddress } from "../utils/constants.js";
 import { caculatePoint } from "../utils/caculatePoint.js";
 
 const provider = new ethers.JsonRpcProvider(
-  "https://endpoints.omniatech.io/v1/matic/mumbai/public"
+  "https://eth-rpc.gateway.pokt.network"
 );
 export const stakingContract = new ethers.Contract(
   stakeAddress,
