@@ -153,8 +153,8 @@ const Index = () => {
   }, [status]);
   useEffect(() => {
     const change = (chainId) => {
-      if (chainId.toString() !== "80001") {
-        setModalBody("Wrong chain. Please switch to Mumbai");
+      if (chainId.toString() !== "1") {
+        setModalBody("Wrong chain. Please switch to Ethereum mainnet");
         setIsAlert(true);
         setIsReady(true);
         setIsOpen(true);
