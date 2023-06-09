@@ -6,9 +6,11 @@ import ahegao_staking_mobile_2 from "/assets/ahegao_staking_mobile_2.png";
 import HeaderIcon from "../stake/Header";
 import useScreenWidth from "../stake/useScreenWidth";
 import MobileHeaderIcon from "../stake/MobileHeader";
+import { useRouter } from "next/router";
 
 const StakeButton = ({ ...restProps }) => {
   const { isMobile } = useScreenWidth();
+  const router = useRouter();
   return (
     <Button
       w={isMobile ? "200px" : "330px"}
@@ -24,7 +26,7 @@ const StakeButton = ({ ...restProps }) => {
         filter: "brightness(1.1)",
       }}
       onClick={() => {
-        alert("coming soon!");
+        router.push("/stake");
       }}
       {...restProps}
     >

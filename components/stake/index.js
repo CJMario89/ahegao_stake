@@ -165,7 +165,6 @@ const Index = () => {
     }
   }, []);
   console.log(submitNfts);
-
   useEffect(() => {
     if (isAvailable) {
       console.log("chain");
@@ -236,6 +235,8 @@ const Index = () => {
                   rowGap="10px"
                   w="100%"
                   position="relative"
+                  overflow="auto"
+                  maxH="270px"
                 >
                   {Array.isArray(stakes) && stakes.length > 0 && (
                     <Flex>

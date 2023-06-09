@@ -9,8 +9,9 @@ const useGetTotalNFT = () => {
     if (!ERC721) {
       return 0;
     }
-    const totalSupply = await ERC721.totalSupply();
-    return totalSupply.toString();
+    // const totalSupply = await ERC721.totalSupply();
+    // return totalSupply.toString();
+    return 3000;
   });
 };
 

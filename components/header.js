@@ -5,6 +5,7 @@ import { SiOpensea, SiTwitter } from "react-icons/si";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { useRouter } from "next/router";
 
 const navOptions = [
   {
@@ -131,6 +132,7 @@ const Header = ({ screenWidth }) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
   const isMobile = screenWidth < 1000;
+  const router = useRouter();
   return (
     <>
       <Flex
@@ -156,7 +158,12 @@ const Header = ({ screenWidth }) => {
         }
       >
         <Flex w="100%" justifyContent="space-between" alignItems="center">
-          <Box mx="5%">
+          <Box
+            mx="5%"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
             <Image
               style={{ width: isMobile ? "130px" : "250px", height: "auto" }}
               src={logo}

@@ -5,6 +5,7 @@ import UserController from "./user-controller.js";
 import { alchemy } from "../utils/alchemy.js";
 import { erc721Address, stakeAddress } from "../utils/constants.js";
 import { caculatePoint } from "../utils/caculatePoint.js";
+import { getStakeAlchemyNFTs } from "./nft-controller.js";
 
 const provider = new ethers.JsonRpcProvider(
   "https://eth-rpc.gateway.pokt.network"
@@ -98,15 +99,7 @@ const StakingController = {
       return stake.tokenId;
     });
 
-    const nfts = await alchemy.nft.getNftMetadataBatch(
-      tokenIds.map((tokenId) => {
-        return {
-          contractAddress: erc721Address,
-          tokenId,
-          tokenType: "ERC721",
-        };
-      })
-    );
+    const nfts = await getStakeAlchemyNFTs(tokenIds);
     const stakings = _stakings.map((stake, i) => {
       return { ...stake.toJSON(), ...nfts[i] };
     });
