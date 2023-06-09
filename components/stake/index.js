@@ -153,8 +153,8 @@ const Index = () => {
   }, [status]);
   useEffect(() => {
     const change = (chainId) => {
-      if (chainId.toString() !== "1") {
-        setModalBody("Wrong chain. Please switch to Ethereum mainnet");
+      if (Number(chainId).toString() !== "1") {
+        setModalBody("Wrong chain. Please switch to Ethereum");
         setIsAlert(true);
         setIsReady(true);
         setIsOpen(true);
@@ -165,6 +165,25 @@ const Index = () => {
     }
   }, []);
   console.log(submitNfts);
+
+  useEffect(() => {
+    if (isAvailable) {
+      console.log("chain");
+      window.ethereum
+        .request({ method: "eth_chainId" })
+        .then((chainId) => {
+          if (Number(chainId).toString() !== "1") {
+            setModalBody("Wrong chain. Please switch to Ethereum");
+            setIsAlert(true);
+            setIsReady(true);
+            setIsOpen(true);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }, [isAvailable]);
 
   return (
     <>

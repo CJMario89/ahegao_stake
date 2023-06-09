@@ -41,7 +41,7 @@ const HintModal = ({ isOpen, onClose, body, isReady, isAlert }) => {
               const currentChain = await ethereum.request({
                 method: "eth_chainId",
               });
-              if (Number(currentChain).toString() === "80001") {
+              if (Number(currentChain).toString() === "1") {
                 onClose();
               }
             }}
