@@ -24,7 +24,7 @@ const useStake = ({ nfts, month }) => {
         console.log(tx);
       }
 
-      const response = await fetch("http://13.115.250.186/api/stake", {
+      const response = await fetch("https://ahegao.love/api/stake", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ tokenIds }),

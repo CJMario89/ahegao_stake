@@ -36,7 +36,7 @@ const useConnect = () => {
         //sign message jwt
         const signer = await init();
         console.log(signer);
-        const response = await fetch("http://13.115.250.186/api/getMessage", {
+        const response = await fetch("https://ahegao.love/api/getMessage", {
           method: "POST",
           body: JSON.stringify({ address: accounts[0] }),
           headers: {
@@ -45,7 +45,7 @@ const useConnect = () => {
         });
         const data = await response.json();
         const signature = await signer.signMessage(data.message);
-        const response_ = await fetch("http://13.115.250.186/api/sign-in", {
+        const response_ = await fetch("https://ahegao.love/api/sign-in", {
           method: "POST",
           body: JSON.stringify({ address: accounts[0], signature }),
           credentials: "include",
@@ -87,7 +87,7 @@ const useConnect = () => {
   //           method: "eth_requestAccounts",
   //         });
   //         //check jwt
-  //         const response = await fetch("http://13.115.250.186/api/getJWTAddress", {
+  //         const response = await fetch("https://ahegao.love/api/getJWTAddress", {
   //           method: "GET",
   //           credentials: "include",
   //           headers: {

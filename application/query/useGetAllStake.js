@@ -5,7 +5,7 @@ import { AccountContext } from "../../pages/_app";
 const useGetAllStake = () => {
   const { account } = useContext(AccountContext);
   return useQuery(["getAllStake", account], async () => {
-    const response = await fetch(`http://13.115.250.186/api/getAllStake`, {
+    const response = await fetch(`https://ahegao.love/api/getAllStake`, {
       method: "GET",
       credentials: "include",
       headers: {

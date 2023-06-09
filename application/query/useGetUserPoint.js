@@ -5,7 +5,7 @@ import { AccountContext } from "../../pages/_app";
 const useGetUserPoint = () => {
   const { account } = useContext(AccountContext);
   return useQuery(["getUserPoint", account], async () => {
-    const response = await fetch(`http://13.115.250.186/api/getUserPoint`, {
+    const response = await fetch(`https://ahegao.love/api/getUserPoint`, {
       method: "GET",
       credentials: "include",
       headers: {
