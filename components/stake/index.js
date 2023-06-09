@@ -476,7 +476,7 @@ const Index = () => {
                 </Flex>
                 <Text
                   position="absolute"
-                  left="128px"
+                  left="122px"
                   bottom="119px"
                   fontWeight="800"
                   color="rgb(200, 200, 200)"
@@ -663,7 +663,7 @@ const Index = () => {
               >
                 <Text>Account:</Text>
                 <Text>{account}</Text>
-                <Text>Point: {point}</Text>
+                <Text>Points: {point}</Text>
               </Flex>
             </Flex>
           </Flex>
