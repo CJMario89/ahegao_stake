@@ -7,8 +7,8 @@ exports.modules = {
 
 // Exports
 module.exports = {
-	"style": {"fontFamily":"'__Source_Sans_Pro_89ad1b', '__Source_Sans_Pro_Fallback_89ad1b'","fontWeight":400,"fontStyle":"normal"},
-	"className": "__className_89ad1b"
+	"style": {"fontFamily":"'__Source_Sans_Pro_0ffa9d', '__Source_Sans_Pro_Fallback_0ffa9d'","fontWeight":400,"fontStyle":"normal"},
+	"className": "__className_0ffa9d"
 };
 
 
@@ -21,7 +21,7 @@ module.exports = {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"src":"/_next/static/media/logo.3de0fbc0.png","height":204,"width":1222,"blurDataURL":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAABCAYAAADjAO9DAAAAHklEQVR4nGN82vK3ngEC/gPxLyDFyMDAyAFkg/gsAJG8BuxhquDbAAAAAElFTkSuQmCC","blurWidth":8,"blurHeight":1});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({"src":"/_next/static/media/logo.3de0fbc0.png","height":204,"width":1222,"blurDataURL":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAABCAMAAADU3h9xAAAABlBMVEXkg/zlg/1uz9RkAAAAAnRSTlN2f89Mf+UAAAAJcEhZcwAACxMAAAsTAQCanBgAAAARSURBVHicY2BgZGBgYGRkAAAAFQAE/1kC3wAAAABJRU5ErkJggg==","blurWidth":8,"blurHeight":1});
 
 /***/ }),
 

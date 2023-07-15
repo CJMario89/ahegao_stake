@@ -646,6 +646,8 @@ const Index = () => {
                   src={approve_button.src}
                   alt=""
                   onClick={() => {
+                    approve();
+
                     if (submitNfts.length <= 0) {
                       return;
                     }

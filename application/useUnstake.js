@@ -34,7 +34,7 @@ const useUnstake = () => {
         }
         throw "User rejected";
       }
-      const response = await fetch("https://ahegao.love/api/getStakeReward", {
+      const response = await fetch("http://localhost:5050/getStakeReward", {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({ tokenIds }),
